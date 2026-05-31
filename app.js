@@ -983,4 +983,25 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Interactive Solve Section Tabs Switching
+  const solveTabBtns = document.querySelectorAll('.solve-tab-btn');
+  const solvePanels = document.querySelectorAll('.solve-panel');
+
+  if (solveTabBtns.length > 0) {
+    solveTabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.getAttribute('data-solve-tab');
+        
+        // Update active tab button
+        solveTabBtns.forEach(b => b.classList.toggle('active', b === btn));
+        
+        // Update active panel
+        solvePanels.forEach(panel => {
+          const panelId = panel.getAttribute('id');
+          panel.classList.toggle('active', panelId === `solve-panel-${tabId}`);
+        });
+      });
+    });
+  }
 });
