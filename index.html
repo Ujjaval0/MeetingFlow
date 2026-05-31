@@ -39,6 +39,12 @@
           Start Free
         </button>
       </div>
+      <!-- Hamburger Toggle Button for Cellphones -->
+      <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
     </nav>
   </div>
 
@@ -1970,6 +1976,12 @@ g>
       <!-- Standard Meeting Workspace (Visible when search is idle) -->
       <div id="workspace-standard-view" style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
         <header class="dash-header">
+          <button class="dash-back-btn" id="dash-back-btn">
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="14" height="14" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Meetings
+          </button>
           <div class="dash-header-title">
             <h2 id="active-meeting-title">Loading Meeting Title...</h2>
             <div class="dash-header-meta">
@@ -2099,6 +2111,12 @@ g>
       <!-- Cross-Platform Search View (Visible when global search input has text) -->
       <div id="workspace-search-view" class="global-results-panel">
         <header class="dash-header">
+          <button class="dash-back-btn" id="dash-back-btn-search">
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="14" height="14" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Meetings
+          </button>
           <div class="dash-header-title">
             <h2>Cross-Platform Search Results</h2>
             <div class="dash-header-meta">

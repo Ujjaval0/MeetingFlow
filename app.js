@@ -99,6 +99,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Mobile Nav Hamburger Toggle
+  const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+  if (mobileNavToggle) {
+    mobileNavToggle.addEventListener('click', () => {
+      siteNav.classList.toggle('open');
+    });
+  }
+
+  // Close mobile nav when links or logo are clicked
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      siteNav.classList.remove('open');
+    });
+  });
+  if (logoLink) {
+    logoLink.addEventListener('click', () => {
+      siteNav.classList.remove('open');
+    });
+  }
+
   // Event Listeners for Footer Links
   footerLinks.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -173,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function exitDashboard() {
     appDashboard.classList.remove('active');
+    appDashboard.classList.remove('show-workspace');
     siteNav.style.display = 'flex';
     siteFooter.style.display = 'block';
     websiteContent.style.display = 'block';
@@ -189,6 +210,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   btnExitDashboard.addEventListener('click', exitDashboard);
+
+  // Dashboard Mobile Back Navigation
+  const dashBackBtn = document.getElementById('dash-back-btn');
+  const dashBackBtnSearch = document.getElementById('dash-back-btn-search');
+  
+  function goBackToMeetingsList() {
+    appDashboard.classList.remove('show-workspace');
+  }
+
+  if (dashBackBtn) {
+    dashBackBtn.addEventListener('click', goBackToMeetingsList);
+  }
+  if (dashBackBtnSearch) {
+    dashBackBtnSearch.addEventListener('click', goBackToMeetingsList);
+  }
 
   // Forms submit simulation on landing page
   document.querySelectorAll('.mini-form-submit, #full-contact-form').forEach(form => {
@@ -307,6 +343,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render interactive analytics charts dynamically
     renderSpeakerEngagementChart(meeting);
+
+    // On mobile, show workspace when a meeting is selected
+    appDashboard.classList.add('show-workspace');
   }
 
   function renderActionItems(meeting) {
