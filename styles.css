@@ -96,6 +96,13 @@
   --r-lg:  16px;
   --r-xl:  24px;
   --r-full: 9999px;
+
+  /* Donut Chart Colors */
+  --primary:        #635bff;
+  --accent-mint:     #00cfb4;
+  --accent-cyan:     #00d4ff;
+  --warning:         #ff7c38;
+  --success:         #10b981;
 }
 
 /* ============================================================
@@ -215,7 +222,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 
 .navbar-container:hover .navbar,
-.navbar-container.scrolled .navbar {
+.navbar:focus-within,
+.navbar.open {
   background: rgba(255, 255, 255, 0.96);
   border-color: var(--border);
   box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0, 0, 0, 0.03);
@@ -502,6 +510,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   align-items: center;
   overflow: visible;
   padding-right: 0;
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+.hero-preview-wrapper:hover {
+  transform: translateY(-4px) scale(1.005);
+  opacity: 0.98;
 }
 
 .hero-preview-container {
@@ -2606,6 +2620,90 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: var(--text-muted);
   letter-spacing: 0;
 }
+.price-billing-note {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0;
+  margin-top: 0.4rem;
+  line-height: 1.2;
+}
+
+.original-price {
+  text-decoration: line-through;
+  opacity: 0.4;
+  font-size: 0.6em;
+  margin-right: 0.5rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.discount-badge {
+  color: var(--indigo);
+  background: var(--indigo-light);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  margin-left: 0.35rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.toggle-discount-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--indigo);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--r-full);
+  margin-left: 0.35rem;
+  display: inline-block;
+  vertical-align: middle;
+  transition: opacity var(--dur-fast), background var(--dur-fast), transform var(--dur-fast);
+  opacity: 0.6;
+  transform: scale(0.95);
+}
+
+.toggle-label.active .toggle-discount-badge {
+  opacity: 1;
+  background: var(--indigo);
+  box-shadow: 0 2px 8px rgba(99, 91, 255, 0.25);
+  transform: scale(1);
+}
+
+.pricing-price .original-price {
+  animation: priceFadeInOriginal 0.35s ease-out;
+}
+
+.pricing-price span,
+.pricing-price .price-billing-note {
+  animation: priceFadeIn 0.35s ease-out;
+}
+
+@keyframes priceFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes priceFadeInOriginal {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 0.4;
+    transform: translateY(0);
+  }
+}
 
 .pricing-features {
   flex: 1;
@@ -2950,14 +3048,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .meeting-list-item {
   display: block;
+  width: 100%;
+  text-align: left;
   padding: 0.7rem 0.75rem;
   border-radius: var(--r-md);
   cursor: pointer;
   border: 1px solid transparent;
   transition: all var(--dur-fast);
   margin-bottom: 2px;
+  background: transparent;
 }
-.meeting-list-item:hover { background: var(--bg-light); }
+.meeting-list-item:hover { background: var(--bg-subtle); }
 .meeting-list-item.active { background: var(--indigo-light); border-color: rgba(99,91,255,0.15); }
 
 .meeting-item-title {
@@ -2973,6 +3074,37 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .meeting-item-date {
   font-size: 0.7rem;
   color: var(--text-muted);
+}
+
+.meeting-item-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Donut Chart Legend Styles */
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.legend-color {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 /* Dash workspace */
@@ -3085,14 +3217,35 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-size: 0.85rem;
   color: var(--text-secondary);
 }
-.topics-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.topics-list .topic-tag {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.3rem 0.75rem;
-  background: var(--indigo-light);
-  color: var(--indigo);
-  border-radius: var(--r-full);
+.topics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.topic-item {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: #fff;
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.topic-item:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+.topic-item h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+.topic-item p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 /* Chart */
@@ -3362,7 +3515,8 @@ mark { background: rgba(99,91,255,0.12); color: var(--indigo); border-radius: 2p
 }
 
 /* Global search results */
-.global-results-panel { display: flex; flex-direction: column; }
+.global-results-panel { display: none; flex-direction: column; }
+.global-results-panel.active { display: flex; }
 .results-list { display: flex; flex-direction: column; gap: 0.75rem; }
 .search-result-card {
   background: #fff;
@@ -3411,12 +3565,21 @@ mark { background: rgba(99,91,255,0.12); color: var(--indigo); border-radius: 2p
 #global-search-bar:focus { border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(99,91,255,0.1); background: #fff; }
 #global-search-bar::placeholder { color: var(--text-muted); }
 
+.dash-sidebar-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border);
+  background: #fff;
+  flex-shrink: 0;
+  display: flex;
+}
+
 /* Upload Trigger */
 #btn-trigger-upload {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
-  padding: 0.5rem 1rem;
+  padding: 0.65rem 1rem;
   background: var(--indigo);
   color: #fff;
   border-radius: var(--r-sm);
@@ -3479,10 +3642,12 @@ mark { background: rgba(99,91,255,0.12); color: var(--indigo); border-radius: 2p
   padding: 3rem 2rem;
   text-align: center;
   cursor: pointer;
-  transition: border-color var(--dur), background var(--dur);
+  transition: border-color var(--dur), background var(--dur), transform var(--dur);
   margin-bottom: 1rem;
 }
-.upload-drag-area:hover { border-color: var(--indigo); background: var(--indigo-light); }
+.upload-drag-area:hover,
+.upload-drag-area.dragover { border-color: var(--indigo); background: var(--indigo-light); }
+.upload-drag-area.dragover { transform: scale(0.98); }
 .upload-drag-area svg { width: 40px; height: 40px; color: var(--text-muted); margin: 0 auto 0.75rem; display: block; }
 .upload-drag-area p { font-size: 0.88rem; color: var(--text-muted); }
 .upload-drag-area span { color: var(--indigo); font-weight: 600; }

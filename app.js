@@ -50,13 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchQueryLabel = document.getElementById('search-query-label');
   const searchCountLabel = document.getElementById('search-count-label');
 
-  // Modal DOM
-  const btnTriggerUpload = document.getElementById('btn-trigger-upload');
-  const uploadModalOverlay = document.getElementById('upload-modal-overlay');
-  const btnCloseUpload = document.getElementById('btn-close-upload');
-  const modalDragArea = document.getElementById('modal-drag-area');
-  const uploadStageSelect = document.getElementById('upload-stage-select');
-  const uploadStageProcessing = document.getElementById('upload-stage-processing');
+
 
   // ==========================================
   // WEBSITE CLIENT ROUTING
@@ -164,17 +158,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const proPrice = document.getElementById('pro-price');
 
   if (billingSwitch) {
-    billingSwitch.addEventListener('click', () => {
-      isAnnualBilling = !isAnnualBilling;
-      billingSwitch.classList.toggle('active', isAnnualBilling);
+    const toggleBilling = (annual) => {
+      isAnnualBilling = annual;
+      billingSwitch.classList.toggle('on', isAnnualBilling);
       billingMonthly.classList.toggle('active', !isAnnualBilling);
       billingAnnual.classList.toggle('active', isAnnualBilling);
       
       if (isAnnualBilling) {
-        proPrice.innerHTML = '$15 <span>/ mo</span>';
+        proPrice.innerHTML = '<span class="original-price">$19</span>$15 <span>/ mo</span><div class="price-billing-note">Billed annually ($180/yr) <span class="discount-badge">Save 20%</span></div>';
       } else {
-        proPrice.innerHTML = '$19 <span>/ mo</span>';
+        proPrice.innerHTML = '$19 <span>/ mo</span><div class="price-billing-note">Billed monthly</div>';
       }
+    };
+
+    billingSwitch.addEventListener('click', () => {
+      toggleBilling(!isAnnualBilling);
+    });
+
+    billingMonthly.addEventListener('click', () => {
+      toggleBilling(false);
+    });
+
+    billingAnnual.addEventListener('click', () => {
+      toggleBilling(true);
     });
   }
 
@@ -208,6 +214,15 @@ document.addEventListener('DOMContentLoaded', () => {
       launchDashboard();
     });
   });
+
+  // Hero Preview Mockup click trigger
+  const heroPreview = document.querySelector('.hero-preview-wrapper');
+  if (heroPreview) {
+    heroPreview.addEventListener('click', (e) => {
+      e.preventDefault();
+      launchDashboard();
+    });
+  }
 
   btnExitDashboard.addEventListener('click', exitDashboard);
 
@@ -251,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isActive = meeting.id === activeMeetingId;
       const li = document.createElement('li');
       li.innerHTML = `
-        <button class="meeting-item-btn ${isActive ? 'active' : ''}" data-id="${meeting.id}">
+        <button class="meeting-list-item meeting-item-btn ${isActive ? 'active' : ''}" data-id="${meeting.id}">
           <span class="meeting-item-title">${meeting.title}</span>
           <span class="meeting-item-meta">
             <span>${meeting.date}</span>
@@ -411,6 +426,9 @@ document.addEventListener('DOMContentLoaded', () => {
           <p class="transcript-text">${textToShow}</p>
         </div>
       `;
+      div.querySelector('.transcript-time-btn').addEventListener('click', () => {
+        jumpToTimestamp(line.time);
+      });
       transcriptLinesTarget.appendChild(div);
     });
   }
@@ -595,13 +613,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     results.forEach(res => {
       const card = document.createElement('div');
-      card.className = 'result-card glass-panel';
+      card.className = 'search-result-card glass-panel';
       card.innerHTML = `
-        <div class="result-meta">
-          <span class="result-meeting-title">${res.meetingTitle}</span>
-          <span class="result-type-badge badge-${res.type}">${res.type} [${res.time}]</span>
+        <div class="search-result-source">
+          ${res.meetingTitle} &middot; ${res.type.toUpperCase()} [${res.time}]
         </div>
-        <p class="result-text">${res.snippet}</p>
+        <p class="search-result-text">${res.snippet}</p>
       `;
 
       card.addEventListener('click', () => {
@@ -626,127 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ==========================================
-  // FILE UPLOAD & ANALYSIS SIMULATION
-  // ==========================================
-  
-  btnTriggerUpload.addEventListener('click', () => {
-    uploadModalOverlay.classList.add('active');
-    uploadStageSelect.style.display = 'block';
-    uploadStageProcessing.classList.remove('active');
-  });
 
-  btnCloseUpload.addEventListener('click', () => {
-    uploadModalOverlay.classList.remove('active');
-  });
-
-  modalDragArea.addEventListener('click', () => {
-    // Transition to processing visual stages
-    uploadStageSelect.style.display = 'none';
-    uploadStageProcessing.classList.add('active');
-    
-    simulateAIProcessingPipeline();
-  });
-
-  function simulateAIProcessingPipeline() {
-    const steps = [
-      { id: 'p-step-1', duration: 1500 },
-      { id: 'p-step-2', duration: 1500 },
-      { id: 'p-step-3', duration: 1500 },
-      { id: 'p-step-4', duration: 1500 }
-    ];
-
-    // Reset processing classes
-    steps.forEach(step => {
-      const el = document.getElementById(step.id);
-      el.classList.remove('active', 'completed');
-    });
-
-    let currentStepIndex = 0;
-
-    function runStep() {
-      if (currentStepIndex > 0) {
-        // Set previous step as completed
-        const prevEl = document.getElementById(steps[currentStepIndex - 1].id);
-        prevEl.classList.remove('active');
-        prevEl.classList.add('completed');
-        prevEl.querySelector('span').textContent = prevEl.querySelector('span').textContent.replace('...', ' ✓');
-      }
-
-      if (currentStepIndex < steps.length) {
-        // Activate current step
-        const currentEl = document.getElementById(steps[currentStepIndex].id);
-        currentEl.classList.add('active');
-        
-        setTimeout(() => {
-          currentStepIndex++;
-          runStep();
-        }, steps[currentStepIndex].duration);
-      } else {
-        // Complete last step and finalize creation
-        setTimeout(() => {
-          finalizeUploadedMeeting();
-        }, 500);
-      }
-    }
-
-    runStep();
-  }
-
-  function finalizeUploadedMeeting() {
-    // 1. Create Mock Meeting Object
-    const newMeeting = {
-      id: `meeting-${meetings.length + 1}`,
-      title: "Beta Feedback Sync & Retro",
-      date: "May 30, 2026",
-      duration: "15 min",
-      speakerCount: 3,
-      summary: {
-        overview: "A quick review of user onboarding funnel modifications following the 3-step refactoring release. Data indicates a 22% improvement in onboarding completions.",
-        decisions: [
-          "Keep the onboarding wizard at 3 steps; deprecate the legacy 8-step process entirely.",
-          "Add a follow-up survey 7 days post-registration to monitor user setup completion rates.",
-          "Promote the new Dashboard Search bar in the user onboarding tour."
-        ],
-        topics: [
-          { title: "Funnel Conversion Growth", description: "Measuring completion metrics after shortening the onboarding wizard." },
-          { title: "Engagement Optimization", description: "Automating surveys and tracking setup drop-off reasons." }
-        ]
-      },
-      actionItems: [
-        { id: `act-${meetings.length + 1}-1`, text: "Configure Amplitude dashboard to track onboarding step events", assignee: "Liam Peterson", status: "pending", dueDate: "June 3, 2026" },
-        { id: `act-${meetings.length + 1}-2`, text: "Draft email copy for the 7-day post-registration survey", assignee: "Mark Davis", status: "pending", dueDate: "June 6, 2026" }
-      ],
-      highlights: [
-        { time: "00:02:10", text: "Mark highlights the 22% jump in onboarding completions after deploying the shortened wizard." },
-        { time: "00:08:45", text: "Liam suggests tracking event logs for individual step completions using amplitude." }
-      ],
-      transcript: [
-        { time: "00:01:05", speaker: "Mark Davis", text: "Hey guys. I want to report that the 3-step onboarding flow is officially live, and we've already tracked a 22% bump in user conversions." },
-        { time: "00:02:10", speaker: "Liam Peterson", text: "That's fantastic. I'm seeing fewer queries failing, and database load is lower too since we aren't creating unfinished profiles." },
-        { time: "00:05:40", speaker: "Sarah Connor", text: "Great. Let's make sure we track exact drop-off events using Amplitude. Let's write down the task to set that up." },
-        { time: "00:08:45", speaker: "Mark Davis", text: "I will draft the email survey copy. Let's get feedback from users after 7 days to see if they need help setting up their meetings." }
-      ]
-    };
-
-    // 2. Add to global meetings array and update sidebar
-    meetings.push(newMeeting);
-    activeMeetingId = newMeeting.id;
-    
-    // 3. Reset Modal UI state
-    uploadModalOverlay.classList.remove('active');
-    
-    // Reset steps label text
-    document.getElementById('p-step-1').querySelector('span').textContent = "Uploading audio streams (14.2 MB)...";
-    document.getElementById('p-step-2').querySelector('span').textContent = "Running neural audio speech transcription...";
-    document.getElementById('p-step-3').querySelector('span').textContent = "Synthesizing topic structures & summaries...";
-    document.getElementById('p-step-4').querySelector('span').textContent = "Extracting actionable checklist & assignees...";
-    
-    // 4. Re-render UI
-    renderSidebarMeetings();
-    selectMeeting(activeMeetingId);
-    switchTab('summary');
-  }
 
   // ==========================================
   // SCROLL REVEAL ANIMATIONS

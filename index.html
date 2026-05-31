@@ -1357,7 +1357,7 @@ g>
         <button class="toggle-switch" id="billing-switch">
           <div class="toggle-knob"></div>
         </button>
-        <span class="toggle-label" id="billing-annual">Annual (Save 20%)</span>
+        <span class="toggle-label" id="billing-annual">Annual <span class="toggle-discount-badge">Save 20%</span></span>
       </div>
 
       <!-- Pricing cards -->
@@ -1367,7 +1367,7 @@ g>
             <h3>Starter</h3>
             <p>For independent founders and small teams.</p>
           </div>
-          <div class="pricing-price" data-monthly="$0" data-annual="$0">$0 <span>/ mo</span></div>
+          <div class="pricing-price" data-monthly="$0" data-annual="$0">$0 <span>/ mo</span><div class="price-billing-note">Free forever</div></div>
           <ul class="pricing-features">
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
@@ -1394,7 +1394,7 @@ g>
             <h3>Pro</h3>
             <p>For scaling product & design organizations.</p>
           </div>
-          <div class="pricing-price" id="pro-price" data-monthly="$19" data-annual="$15">$19 <span>/ mo</span></div>
+          <div class="pricing-price" id="pro-price" data-monthly="$19" data-annual="$15">$19 <span>/ mo</span><div class="price-billing-note">Billed monthly</div></div>
           <ul class="pricing-features">
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
@@ -1424,7 +1424,7 @@ g>
             <h3>Enterprise</h3>
             <p>For custom security & governance needs.</p>
           </div>
-          <div class="pricing-price">Custom</div>
+          <div class="pricing-price">Custom<div class="price-billing-note">Tailored agreement</div></div>
           <ul class="pricing-features">
             <li>
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
@@ -1960,15 +1960,7 @@ g>
         </div>
       </div>
 
-      <div class="dash-sidebar-footer">
-        <button class="kiro-btn kiro-btn-primary" id="btn-trigger-upload" style="width: 100%; gap: 0.5rem;">
-          <span class="kiro-btn-bg"></span>
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg" style="position: relative; z-index: 2;">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-          </svg>
-          Upload Meeting
-        </button>
-      </div>
+
     </aside>
 
     <!-- Main Content Workspace -->
@@ -2134,50 +2126,7 @@ g>
     </main>
   </div>
 
-  <!-- UPLOAD / PROCESS STREAM MODAL -->
-  <div class="modal-overlay" id="upload-modal-overlay">
-    <div class="upload-modal glass-panel">
-      <div id="upload-stage-select">
-        <h2 style="margin-bottom: 1rem;">Upload Meeting File</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 2rem;">Upload your recording file (MP3, M4A, MP4) or input a mock link to run the analysis.</p>
-        <div class="upload-drag-area" id="modal-drag-area">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-          </svg>
-          <p>Drag and drop meeting recording here, or <span>browse local files</span></p>
-        </div>
-        <button class="kiro-btn kiro-btn-secondary" id="btn-close-upload" style="width: 100%;">
-          <span class="kiro-btn-bg"></span>
-          Cancel
-        </button>
-      </div>
 
-      <div class="processing-view" id="upload-stage-processing">
-        <div class="processing-spinner"></div>
-        <h2 style="margin-bottom: 1rem;" id="processing-title">Processing Recording</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 2.5rem;" id="processing-subtitle">Deploying intelligence pipeline to transcribe and summarize...</p>
-        
-        <div class="progress-steps">
-          <div class="p-step active" id="p-step-1">
-            <div class="p-step-dot"></div>
-            <span>Uploading audio streams (14.2 MB)...</span>
-          </div>
-          <div class="p-step" id="p-step-2">
-            <div class="p-step-dot"></div>
-            <span>Running neural audio speech transcription...</span>
-          </div>
-          <div class="p-step" id="p-step-3">
-            <div class="p-step-dot"></div>
-            <span>Synthesizing topic structures & summaries...</span>
-          </div>
-          <div class="p-step" id="p-step-4">
-            <div class="p-step-dot"></div>
-            <span>Extracting actionable checklist & assignees...</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
 
