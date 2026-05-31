@@ -972,15 +972,28 @@ document.addEventListener('DOMContentLoaded', () => {
     chartContainer.innerHTML = svgContent + legendContent;
   }
 
-  // Scroll Listener for Navbar scrolled effect
+  // Scroll Listener for Navbar scrolled effect and hide/show on scroll
   const navbarContainer = document.querySelector('.navbar-container');
   if (navbarContainer) {
+    let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 20) {
+      const currentScrollY = window.scrollY;
+      
+      // Scrolled state background
+      if (currentScrollY > 20) {
         navbarContainer.classList.add('scrolled');
       } else {
         navbarContainer.classList.remove('scrolled');
       }
+      
+      // Hide on scroll down, show on scroll up
+      if (currentScrollY > lastScrollY && currentScrollY > 120) {
+        navbarContainer.classList.add('navbar-hidden');
+      } else if (currentScrollY < lastScrollY) {
+        navbarContainer.classList.remove('navbar-hidden');
+      }
+      
+      lastScrollY = currentScrollY;
     });
   }
 
