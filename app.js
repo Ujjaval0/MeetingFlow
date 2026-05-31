@@ -2,6 +2,9 @@ import { mockMeetings } from './mockData.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   
+  // Initialize page-active body class
+  document.body.className = 'page-active-home';
+
   // State variables
   let meetings = [...mockMeetings];
   let activeMeetingId = meetings[0].id;
@@ -60,6 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   
   function switchPage(pageId) {
+    // Update active page class on body for styling overrides
+    document.body.className = `page-active-${pageId}`;
+
     // Hide all sections, remove active classes
     pageSections.forEach(section => {
       section.classList.remove('active');
@@ -298,6 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       highlightsItemsTarget.appendChild(div);
     });
+
+    // Render interactive analytics charts dynamically
+    renderSpeakerEngagementChart(meeting);
   }
 
   function renderActionItems(meeting) {
@@ -717,107 +726,261 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // HERO PREVIEW CHECKLIST LOOP (Premium Living Visual)
+  // HERO PREVIEW Redesigned Mock Dashboard Animation
+  // 8-second continuous workflow animation loop
   // ==========================================
-  const previewItem1 = document.getElementById('hero-preview-item-1');
-  const previewCheck1 = document.getElementById('hero-preview-check-1');
-  const previewItem2 = document.getElementById('hero-preview-item-2');
-  const previewCheck2 = document.getElementById('hero-preview-check-2');
+  const demoTranscript1 = document.getElementById('demo-transcript-1');
+  const demoTranscript2 = document.getElementById('demo-transcript-2');
+  const demoTranscript3 = document.getElementById('demo-transcript-3');
+  const demoProcessing = document.getElementById('demo-summary-processing');
+  const demoSummary = document.getElementById('demo-summary-items');
+  const demoAction1 = document.getElementById('demo-action-1');
+  const demoAction2 = document.getElementById('demo-action-2');
+  const demoAction3 = document.getElementById('demo-action-3');
+  const demoKnowledge = document.getElementById('demo-knowledge-content');
+  const demoCopilot = document.getElementById('demo-copilot-content');
+  const demoBadgeLeft = document.querySelector('.badge-left');
+  const demoBadgeRight = document.querySelector('.badge-right');
 
-  if (previewItem1 && previewCheck1 && previewItem2 && previewCheck2) {
-    setInterval(() => {
-      const isItem1Checked = previewCheck1.classList.contains('checked');
-      if (isItem1Checked) {
-        previewCheck1.classList.remove('checked');
-        previewItem1.classList.remove('done');
-        
-        previewCheck2.classList.add('checked');
-        previewItem2.classList.add('done');
-      } else {
-        previewCheck1.classList.add('checked');
-        previewItem1.classList.add('done');
-        
-        previewCheck2.classList.remove('checked');
-        previewItem2.classList.remove('done');
-      }
-    }, 4000);
-  }
+  if (demoTranscript1) {
+    function resetDemo() {
+      // Hide all elements
+      demoTranscript1.classList.remove('show');
+      demoTranscript2.classList.remove('show');
+      demoTranscript3.classList.remove('show');
+      
+      demoProcessing.style.opacity = '0';
+      demoProcessing.querySelector('.demo-processing-text').textContent = 'Processing...';
+      demoProcessing.querySelector('.demo-sparkle').className = 'demo-sparkle animate-sparkle';
+      
+      demoSummary.classList.remove('show');
+      
+      demoAction1.classList.remove('show');
+      demoAction2.classList.remove('show');
+      demoAction3.classList.remove('show');
+      
+      demoKnowledge.classList.remove('show');
+      demoCopilot.classList.remove('show');
+      
+      demoBadgeLeft.classList.remove('show');
+      demoBadgeRight.classList.remove('show');
 
-  // ==========================================
-  // HERO COPILOT PROMPT SIMULATOR
-  // ==========================================
-  const copilotPrompt = document.getElementById('copilot-prompt-input');
-  const copilotResponse = document.getElementById('copilot-response-target');
-
-  if (copilotPrompt && copilotResponse) {
-    const simulationData = [
-      {
-        prompt: "Summarize the key decisions.",
-        response: "• Shift Q3 resources to mobile UX optimizations.\n• HubSpot integrations postponed to late Q4.\n• Setup bi-weekly deployment cycle."
-      },
-      {
-        prompt: "What are Emily's action items?",
-        response: "✓ Emily Watson: Export new Figma design tokens to JSON format (Due May 26 - Completed)."
-      },
-      {
-        prompt: "What caused the dashboard delay?",
-        response: "• Technical Latency: Identified an N+1 database query retrieving speaker profiles on transcript load.\n• Resolution: Liam Peterson cached profiles, lowering load latency to 180ms."
-      }
-    ];
-
-    let currentSimIndex = 0;
-
-    function typeSimulation() {
-      const data = simulationData[currentSimIndex];
-      let pText = "";
-      let rText = "";
-      let charIndex = 0;
-
-      // Start typing prompt
-      copilotPrompt.textContent = "";
-      copilotResponse.innerHTML = '<span style="opacity: 0.5;">Thinking...</span>';
-
-      const promptInterval = setInterval(() => {
-        if (charIndex < data.prompt.length) {
-          pText += data.prompt[charIndex];
-          copilotPrompt.textContent = pText + "_";
-          charIndex++;
-        } else {
-          clearInterval(promptInterval);
-          copilotPrompt.textContent = data.prompt; // remove cursor
-          
-          // Thinking phase, then type response
-          setTimeout(() => {
-            let respIndex = 0;
-            copilotResponse.innerHTML = "";
-            const responseInterval = setInterval(() => {
-              if (respIndex < data.response.length) {
-                // Handle newlines
-                if (data.response[respIndex] === '\n') {
-                  rText += '<br>';
-                } else {
-                  rText += data.response[respIndex];
-                }
-                copilotResponse.innerHTML = rText + '<span style="color: var(--accent-mint);">|</span>';
-                respIndex++;
-              } else {
-                clearInterval(responseInterval);
-                copilotResponse.innerHTML = rText; // remove cursor
-                
-                // Next simulation round
-                setTimeout(() => {
-                  currentSimIndex = (currentSimIndex + 1) % simulationData.length;
-                  typeSimulation();
-                }, 5000);
-              }
-            }, 30);
-          }, 800);
-        }
-      }, 50);
+      // Reset horizontal step indicator highlights
+      document.querySelectorAll('.workflow-step').forEach(step => {
+        step.classList.remove('active');
+      });
     }
 
-    // Trigger simulation startup after a short delay
-    setTimeout(typeSimulation, 2000);
+    function runWorkflowAnimation() {
+      resetDemo();
+
+      // Step 1: Meeting transcript lines appear (0s - 1.5s)
+      const stepMeeting = document.getElementById('step-meeting');
+      if (stepMeeting) stepMeeting.classList.add('active');
+
+      setTimeout(() => {
+        demoTranscript1.classList.add('show');
+      }, 100);
+      setTimeout(() => {
+        demoTranscript2.classList.add('show');
+      }, 500);
+      setTimeout(() => {
+        demoTranscript3.classList.add('show');
+      }, 900);
+
+      // Step 2: AI Processing animation begins (1.5s - 3s)
+      setTimeout(() => {
+        if (stepMeeting) stepMeeting.classList.remove('active');
+        const stepProcessing = document.getElementById('step-processing');
+        if (stepProcessing) stepProcessing.classList.add('active');
+        demoProcessing.style.opacity = '1';
+      }, 1500);
+
+      // Step 3: Summary card auto-generates (3s - 4.5s)
+      setTimeout(() => {
+        const stepProcessing = document.getElementById('step-processing');
+        if (stepProcessing) stepProcessing.classList.remove('active');
+        const stepSummary = document.getElementById('step-summary');
+        if (stepSummary) stepSummary.classList.add('active');
+
+        demoProcessing.querySelector('.demo-processing-text').textContent = 'Completed';
+        demoProcessing.querySelector('.demo-sparkle').className = 'demo-sparkle'; // stop animation
+        demoSummary.classList.add('show');
+      }, 3000);
+
+      // Step 4: Action items are extracted (4.5s - 5.5s)
+      setTimeout(() => {
+        const stepSummary = document.getElementById('step-summary');
+        if (stepSummary) stepSummary.classList.remove('active');
+        const stepActions = document.getElementById('step-actions');
+        if (stepActions) stepActions.classList.add('active');
+
+        demoAction1.classList.add('show');
+      }, 4500);
+      setTimeout(() => {
+        demoAction2.classList.add('show');
+      }, 4800);
+      setTimeout(() => {
+        demoAction3.classList.add('show');
+      }, 5100);
+
+      // Step 5: Knowledge base & AI Copilot updates (5.5s - 6.5s)
+      setTimeout(() => {
+        const stepActions = document.getElementById('step-actions');
+        if (stepActions) stepActions.classList.remove('active');
+        const stepKnowledge = document.getElementById('step-knowledge');
+        if (stepKnowledge) stepKnowledge.classList.add('active');
+
+        demoKnowledge.classList.add('show');
+        demoCopilot.classList.add('show');
+      }, 5500);
+
+      // Step 6: Performance metrics appear (6.5s - 8.5s)
+      setTimeout(() => {
+        const stepKnowledge = document.getElementById('step-knowledge');
+        if (stepKnowledge) stepKnowledge.classList.remove('active');
+        const stepExecution = document.getElementById('step-execution');
+        if (stepExecution) stepExecution.classList.add('active');
+
+        demoBadgeLeft.classList.add('show');
+        demoBadgeRight.classList.add('show');
+      }, 6500);
+    }
+
+    // Run first iteration immediately
+    runWorkflowAnimation();
+
+    // Loop continuously every 8.5 seconds to allow state settling
+    setInterval(runWorkflowAnimation, 8500);
   }
 
+
+
+  // ==========================================
+  // VOICE TRANSCRIPTION WAVEFORM VISUALIZER
+  // ==========================================
+  const waveContainer = document.getElementById('transcription-wave-bars');
+  const barCount = 14;
+  let waveBars = [];
+
+  if (waveContainer) {
+    // Generate visualizer bars
+    for (let i = 0; i < barCount; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'visualizer-bar';
+      waveContainer.appendChild(bar);
+      waveBars.push(bar);
+    }
+
+    // Animation loop
+    function animateWave() {
+      waveBars.forEach((bar) => {
+        // Rhythmic random heights between 4px and 26px
+        const randomHeight = Math.floor(Math.random() * 22) + 4;
+        bar.style.height = `${randomHeight}px`;
+      });
+      requestAnimationFrame(() => {
+        setTimeout(animateWave, 100); // Throttle to 10fps for clean wave look
+      });
+    }
+    animateWave();
+  }
+
+  // ==========================================
+  // SVG INTERACTIVE CHARTS SYSTEM
+  // ==========================================
+  function renderSpeakerEngagementChart(meeting) {
+    const chartContainer = document.getElementById('speaker-engagement-chart-container');
+    if (!chartContainer) return;
+
+    // Calculate characters per speaker dynamically from transcripts database
+    const speakerStats = {};
+    let totalChars = 0;
+
+    meeting.transcript.forEach(line => {
+      const charCount = line.text.length;
+      speakerStats[line.speaker] = (speakerStats[line.speaker] || 0) + charCount;
+      totalChars += charCount;
+    });
+
+    // Format list sorted by character volume percentages
+    const speakers = Object.keys(speakerStats).map(name => {
+      const charCount = speakerStats[name];
+      const percentage = Math.round((charCount / totalChars) * 100);
+      return { name, percentage };
+    }).sort((a, b) => b.percentage - a.percentage);
+
+    // Color schema matching default dark / light modes
+    const colors = [
+      'var(--primary)',
+      'var(--accent-mint)',
+      'var(--accent-cyan)',
+      'var(--warning)',
+      'var(--success)'
+    ];
+
+    // Build SVG Donut Chart
+    let accumulatedPercentage = 0;
+    let svgContent = `
+      <svg viewBox="0 0 100 100" width="130" height="130" style="transform: rotate(-90deg); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));">
+    `;
+
+    speakers.forEach((sp, index) => {
+      const color = colors[index % colors.length];
+      const radius = 35;
+      const circumference = 2 * Math.PI * radius;
+      const strokeDashoffset = circumference - (sp.percentage / 100) * circumference;
+      const strokeDasharray = `${circumference} ${circumference}`;
+      const rotation = (accumulatedPercentage / 100) * 360;
+
+      svgContent += `
+        <circle class="chart-slice" cx="50" cy="50" r="${radius}"
+          fill="transparent"
+          stroke="${color}"
+          stroke-width="11"
+          stroke-dasharray="${strokeDasharray}"
+          stroke-dashoffset="${strokeDashoffset}"
+          style="transform-origin: center; transform: rotate(${rotation}deg);"
+          title="${sp.name}: ${sp.percentage}%"
+        />
+      `;
+      accumulatedPercentage += sp.percentage;
+    });
+
+    // Core central cutout
+    svgContent += `
+      <circle cx="50" cy="50" r="28" fill="var(--bg-secondary)" />
+      <text x="50" y="54" text-anchor="middle" font-family="var(--font-display)" font-weight="900" font-size="8" fill="var(--text-primary)" style="transform: rotate(90deg); transform-origin: center; letter-spacing: 0.05em;">
+        SPEAK
+      </text>
+      </svg>
+    `;
+
+    // Legend content block
+    let legendContent = '<div class="chart-legend">';
+    speakers.forEach((sp, index) => {
+      const color = colors[index % colors.length];
+      legendContent += `
+        <div class="legend-item">
+          <span class="legend-color" style="background: ${color}"></span>
+          <span>${sp.name}: ${sp.percentage}%</span>
+        </div>
+      `;
+    });
+    legendContent += '</div>';
+
+    chartContainer.innerHTML = svgContent + legendContent;
+  }
+
+  // Scroll Listener for Navbar scrolled effect
+  const navbarContainer = document.querySelector('.navbar-container');
+  if (navbarContainer) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        navbarContainer.classList.add('scrolled');
+      } else {
+        navbarContainer.classList.remove('scrolled');
+      }
+    });
+  }
 });
