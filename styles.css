@@ -368,6 +368,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   flex: 0 0 640px;       /* base width — can grow but never shrink below min */
   min-width: 320px;
   max-width: 680px;
+  margin-left: -0.75rem; /* tiny left nudge */
 }
 
 /* Badge */
@@ -479,10 +480,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .hero-preview-container {
   position: relative;
-  width: 100%;
-  max-width: 640px;
-  flex-shrink: 1;
-  margin-right: -4rem;   /* pushes dashboard past the hero's right padding */
+  width: 720px;
+  max-width: none;
+  flex-shrink: 0;
+  margin-right: -8rem;   /* moderate right overflow — wider than original but won't disappear off-screen */
 }
 
 /* Floating stat badges */
@@ -1002,7 +1003,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* Floating stats badge overrides */
 .badge-left {
   top: 10%;
-  left: -12%;
+  left: -35px;
   opacity: 0;
   transform: translateY(20px) scale(0.95);
   transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
@@ -3570,6 +3571,14 @@ mark { background: rgba(99,91,255,0.12); color: var(--indigo); border-radius: 2p
     width: 680px; 
     max-width: 100%;
     flex-shrink: 1;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .badge-left {
+    left: -12%;
+  }
+  .badge-right {
+    right: -10%;
   }
   .stripe-canvas-container { width: 100%; height: 50vh; clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%); top: auto; bottom: 0; }
   .bento-grid { grid-template-columns: 1fr; }
